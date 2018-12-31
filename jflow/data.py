@@ -28,7 +28,7 @@ def get_data(filename='fremont.csv', url=URL, force_download=False):
     df = pd.read_csv(filename, index_col='Date')
     # much faster to avoid parsing date in read, move it below with asserting the format.
     try:
-        df.index = pd.to_datetime(df.index, format='%m/%d/%Y %H:%M:%S %p')
+        df.index = pd.to_datetime(df.index, format='%m/%d/%Y %I:%M:%S %p')
     except TypeError:
         df.index = pd.to_datetime(df.index)
     df.columns=['East', 'West'] #column names were verbose 
