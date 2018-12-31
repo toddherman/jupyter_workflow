@@ -25,7 +25,12 @@ def get_data(filename='fremont.csv', url=URL, force_download=False):
     
     if force_download or not os.path.exists(filename):
         urlretrieve(URL, filename)
-    df = pd.read_csv(filename, index_col='Date', parse_dates=True)
+    df = pd.read_csv(filename, index_col='Date')
+    # much faster to avoid parsing date in read, move it below with asserting the format.
+    try:
+        df.index = pd.to_datetime(df.index, format='%m/%d/%Y %H:%M:%S %p')
+    except TypeError:
+        df.index = pd.to_datetime(df.index)
     df.columns=['East', 'West'] #column names were verbose 
     df['Total'] = df['West'] + df['East']
     return df
